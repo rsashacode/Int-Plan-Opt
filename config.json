@@ -1,0 +1,28 @@
+{
+  "schema": [
+    {
+      "name": "Meeting",
+      "parameters": [
+        {
+          "name": "time_start",
+          "boundaries": [9, 18],
+          "type": "var"
+        },
+        {
+          "name": "duration",
+          "type": "const"
+        },
+        {
+          "name": "potential_revenue",
+          "type": "const"
+        },
+        {
+          "name": "order",
+          "type": "var"
+        }
+      ]
+    }
+  ],
+  "var_input_method": "JSON",
+  "stopping_criteria": "convergence"
+}
