@@ -1,35 +1,26 @@
 {
-  "schema": [
-    {
-      "name": "Meeting",
-      "parameters": [
-        {
-          "name": "included",
-          "type": "var"
-        },
-        {
-          "name": "time_start",
-          "type": "var"
-        },
-        {
-          "name": "time_start_lower_boundary",
-          "type": "const"
-        },
-        {
-          "name": "time_start_upper_boundary",
-          "type": "const"
-        },
-        {
-          "name": "duration",
-          "type": "const"
-        },
-        {
-          "name": "potential_revenue",
-          "type": "const"
-        }
-      ]
+  "schema": {
+    "Meeting": {
+      "included": {
+        "type": "var"
+      },
+      "time_start": {
+        "type": "var"
+      },
+      "time_start_lower_boundary": {
+        "type": "const"
+      },
+      "time_start_upper_boundary": {
+        "type": "const"
+      },
+      "duration": {
+        "type": "const"
+      },
+      "potential_revenue": {
+        "type": "const"
+      }
     }
-  ],
+  },
   "input_method": "JSON",
   "stopping_criteria": "convergence"
 }

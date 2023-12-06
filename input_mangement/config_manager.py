@@ -26,17 +26,14 @@ class ConfigurationManager:
                     len(config_keys) == 3]):
             raise TypeError(f'Configuration key words are incorrect')
 
-        schemas = self.configuration_settings['schema']
-        for sch in schemas:
-            ent_keys = sch.keys()
-            if not all(['name' in ent_keys, 'parameters' in ent_keys, len(ent_keys) == 2]):
-                raise TypeError('Entity schema key words are incorrect.')
+        schema = self.configuration_settings['schema']
+        for sch_name in schema.keys():
+            sch = schema[sch_name]
+            sch_parameters = sch.keys()
 
-            sch_name = sch['name']
-            for parameter in sch['parameters']:
+            for parameter_name in sch_parameters:
+                parameter = sch[parameter_name]
                 for key in parameter.keys():
-                    if key == 'name' and type(parameter[key]) != str:
-                        raise TypeError(f'Name of parameter in schema {sch_name} is not string')
                     if key == 'type':
                         if parameter[key] not in ["const", "var"]:
                             raise TypeError(f'Values of field type of parameter {parameter["name"]} in schema {sch_name}'
@@ -45,17 +42,39 @@ class ConfigurationManager:
 
 
 class InputManager:
-    def __init__(self, schema: dict):
+    def __init__(self, schema: dict, user_input: dict):
         self.schema = schema
-        self.schema_keys = self.schema.keys()
+        self.user_input = user_input
 
-    def validate_input(self, input_: list[dict]):
-        for item in input_:
-            item_keys = item.keys()
-            if "name" not in item_keys:
+        self.input_validated = False
+
+    def validate_input(self):
+        for obj_name in self.user_input:
+            obj_parameters = self.user_input[obj_name].keys()
+            if "schema" not in obj_parameters:
                 raise KeyError('Mandatory key "name" not found in the object')
-            other_keys = [key for key in item_keys if key != "name"]
+            obj_schema_name = self.user_input[obj_name]["schema"]
+            if obj_schema_name not in self.schema.keys():
+                raise KeyError(f"Template {obj_schema_name} is no registered.")
+            schema_template = self.schema[obj_schema_name]
+            other_keys = [key for key in obj_parameters if key != "schema"]
+
             for key in other_keys:
-                if key not in self.schema_keys:
+                if key not in schema_template.keys():
                     raise KeyError(f'Key {key} provided in input is not present in schema')
+            for key in schema_template.keys():
+                if key not in other_keys:
+                    raise KeyError(f'Key {key} provided not provided in input')
+        self.input_validated = True
         print("Input validated.")
+
+    def register_input(self):
+        registry = []
+        if not self.input_validated:
+            raise RuntimeError("Input is not validated")
+        i = 0
+        for item in self.user_input:
+            item_keys = [key for key in list(item.keys()) if key not in ["name", "schema"]]
+            for key in item_keys:
+                if self.schema[key]["type"] == "var":
+                    registry.append(key)
