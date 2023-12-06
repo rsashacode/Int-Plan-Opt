@@ -1,20 +1,23 @@
-class Event:
-    def __init__(self, duration, revenue, cost, resources):
-        self.duration = duration
-        self.revenue = revenue
-        self.cost = cost
-        self.resources = resources
+import json
+
+from input_management import ConfigurationManager, InputManager
+from pathlib import Path
+
+CONFIG_PATH = Path('./config.json')
 
 
-def objective_function(event):
-    return event.revenue - event.cost
+def main():
+    config_manager = ConfigurationManager(CONFIG_PATH)
+    config_manager.load_configuration()
 
+    with open('./test/input.json', 'r') as j:
+        input_ = json.loads(j.read())
 
-def simple_genetic_algorithm(events):
-    return events
+    schema = config_manager.configuration_settings["schema"]
+    input_manger = InputManager(schema, input_)
+    input_manger.register_input()
+    print()
 
 
 if __name__ == "__main__":
-    meeting = Event(duration=2, revenue=200, cost=50, resources=["Conference Room", "Projector"])
-    optimized_schedule = simple_genetic_algorithm([meeting])
-    print(f"Optimized Schedule: {optimized_schedule}")
+    main()

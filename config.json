@@ -1,0 +1,14 @@
+{
+  "schema": {
+    "Meeting": {
+      "included": "var",
+      "time_start": "var",
+      "time_start_lower_boundary": "const",
+      "time_start_upper_boundary": "const",
+      "duration": "const",
+      "potential_revenue": "const"
+    }
+  },
+  "input_method": "JSON",
+  "stopping_criteria": "convergence"
+}
