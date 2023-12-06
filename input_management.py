@@ -46,14 +46,15 @@ class InputManager:
         self.schema = schema
         self.user_input = user_input
 
-        self.input_validated = False
-
         self.index_to_parameter = {}
         self.parameter_to_index = {}
 
+        self.input_validated = False
+        self.indexes_assigned = False
+
     def register_input(self):
         self._validate_input()
-        self._allocate_indexes()
+        self._assign_indexes()
 
     def _validate_input(self):
         for obj_name in self.user_input:
@@ -75,7 +76,7 @@ class InputManager:
         self.input_validated = True
         print("Input validated.")
 
-    def _allocate_indexes(self):
+    def _assign_indexes(self):
         i = 0
         for user_object_name in self.user_input.keys():
             user_object = self.user_input[user_object_name]
@@ -83,10 +84,11 @@ class InputManager:
             for parameter in user_object.keys():
                 if parameter != 'schema':
                     if self.schema[user_object["schema"]][parameter] == 'var':
-                        self.index_to_parameter[i] = {"name": user_object_name, parameter: parameter}
+                        self.index_to_parameter[i] = {"name": user_object_name, "parameter": parameter}
                         parameter_to_index_object[parameter] = i
                         i += 1
             self.parameter_to_index[user_object_name] = parameter_to_index_object
+        self.indexes_assigned = True
         print("Indexes allocated")
 
 
