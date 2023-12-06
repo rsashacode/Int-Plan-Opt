@@ -21,7 +21,7 @@ class ConfigurationManager:
             raise ValueError("Configuration is empty")
 
         if not all(['schema' in config_keys,
-                    'var_input_method' in config_keys,
+                    'input_method' in config_keys,
                     'stopping_criteria' in config_keys,
                     len(config_keys) == 3]):
             raise TypeError(f'Configuration key words are incorrect')
@@ -37,15 +37,25 @@ class ConfigurationManager:
                 for key in parameter.keys():
                     if key == 'name' and type(parameter[key]) != str:
                         raise TypeError(f'Name of parameter in schema {sch_name} is not string')
-                    if key == 'boundaries':
-                        if type(parameter[key]) != list:
-                            raise TypeError(f'Boundaries of parameter {parameter["name"]} in schema {sch_name} '
-                                            f'are not list []')
-                        if len(parameter[key]) != 2:
-                            raise TypeError(f'Boundaries of parameter {parameter["name"]} in schema {sch_name} '
-                                            f'must be a list of 2')
                     if key == 'type':
                         if parameter[key] not in ["const", "var"]:
                             raise TypeError(f'Values of field type of parameter {parameter["name"]} in schema {sch_name}'
                                             f' must be "const" or "var"')
         print("Configuration validated.")
+
+
+class InputManager:
+    def __init__(self, schema: dict):
+        self.schema = schema
+        self.schema_keys = self.schema.keys()
+
+    def validate_input(self, input_: list[dict]):
+        for item in input_:
+            item_keys = item.keys()
+            if "name" not in item_keys:
+                raise KeyError('Mandatory key "name" not found in the object')
+            other_keys = [key for key in item_keys if key != "name"]
+            for key in other_keys:
+                if key not in self.schema_keys:
+                    raise KeyError(f'Key {key} provided in input is not present in schema')
+        print("Input validated.")

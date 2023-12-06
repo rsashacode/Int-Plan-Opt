@@ -4,9 +4,20 @@
       "name": "Meeting",
       "parameters": [
         {
-          "name": "time_start",
-          "boundaries": [9, 18],
+          "name": "included",
           "type": "var"
+        },
+        {
+          "name": "time_start",
+          "type": "var"
+        },
+        {
+          "name": "time_start_lower_boundary",
+          "type": "const"
+        },
+        {
+          "name": "time_start_upper_boundary",
+          "type": "const"
         },
         {
           "name": "duration",
@@ -15,14 +26,10 @@
         {
           "name": "potential_revenue",
           "type": "const"
-        },
-        {
-          "name": "order",
-          "type": "var"
         }
       ]
     }
   ],
-  "var_input_method": "JSON",
+  "input_method": "JSON",
   "stopping_criteria": "convergence"
 }
