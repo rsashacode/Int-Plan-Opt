@@ -1,6 +1,6 @@
 import json
 
-from input_mangement import ConfigurationManager, InputManager
+from input_management import ConfigurationManager, InputManager
 from pathlib import Path
 
 CONFIG_PATH = Path('./config.json')
@@ -15,7 +15,7 @@ def main():
 
     schema = config_manager.configuration_settings["schema"]
     input_manger = InputManager(schema, input_)
-    input_manger.validate_input()
+    input_manger.register_input()
     print()
 
 

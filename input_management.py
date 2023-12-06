@@ -7,14 +7,15 @@ class ConfigurationManager:
     def __init__(self, config_filepath: Path):
         self.config_filepath = config_filepath
         self.configuration_settings = {}
+        self.schema = {}
 
     def load_configuration(self):
         with open(self.config_filepath, 'r') as j:
             self.configuration_settings = json.loads(j.read())
-        self.validate_configuration()
+        self._validate_configuration()
         print("Configuration ready.")
 
-    def validate_configuration(self):
+    def _validate_configuration(self):
         config_keys = self.configuration_settings.keys()
 
         if not self.configuration_settings:
@@ -32,12 +33,11 @@ class ConfigurationManager:
             sch_parameters = sch.keys()
 
             for parameter_name in sch_parameters:
-                parameter = sch[parameter_name]
-                for key in parameter.keys():
-                    if key == 'type':
-                        if parameter[key] not in ["const", "var"]:
-                            raise TypeError(f'Values of field type of parameter {parameter["name"]} in schema {sch_name}'
-                                            f' must be "const" or "var"')
+                parameter_type = sch[parameter_name]
+                if parameter_type not in ["const", "var"]:
+                    raise TypeError(f'Type of parameter {parameter_name} in schema {sch_name}'
+                                    f' must be "const" or "var"')
+        self.schema = schema
         print("Configuration validated.")
 
 
@@ -48,7 +48,14 @@ class InputManager:
 
         self.input_validated = False
 
-    def validate_input(self):
+        self.index_to_parameter = {}
+        self.parameter_to_index = {}
+
+    def register_input(self):
+        self._validate_input()
+        self._allocate_indexes()
+
+    def _validate_input(self):
         for obj_name in self.user_input:
             obj_parameters = self.user_input[obj_name].keys()
             if "schema" not in obj_parameters:
@@ -68,13 +75,18 @@ class InputManager:
         self.input_validated = True
         print("Input validated.")
 
-    def register_input(self):
-        registry = []
-        if not self.input_validated:
-            raise RuntimeError("Input is not validated")
+    def _allocate_indexes(self):
         i = 0
-        for item in self.user_input:
-            item_keys = [key for key in list(item.keys()) if key not in ["name", "schema"]]
-            for key in item_keys:
-                if self.schema[key]["type"] == "var":
-                    registry.append(key)
+        for user_object_name in self.user_input.keys():
+            user_object = self.user_input[user_object_name]
+            parameter_to_index_object = {}
+            for parameter in user_object.keys():
+                if parameter != 'schema':
+                    if self.schema[user_object["schema"]][parameter] == 'var':
+                        self.index_to_parameter[i] = {"name": user_object_name, parameter: parameter}
+                        parameter_to_index_object[parameter] = i
+                        i += 1
+            self.parameter_to_index[user_object_name] = parameter_to_index_object
+        print("Indexes allocated")
+
+
