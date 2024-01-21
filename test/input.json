@@ -1,0 +1,47 @@
+{
+  "Meeting1": {
+    "schema": "Meeting",
+    "time_start_lower_boundary": 9,
+    "time_start_upper_boundary": 12,
+    "duration": 3,
+    "potential_revenue": 300,
+    "included": 1,
+    "time_start": 9
+  },
+  "Meeting2": {
+    "schema": "Meeting",
+    "time_start_lower_boundary": 10,
+    "time_start_upper_boundary": 11,
+    "duration": 1,
+    "potential_revenue": 100,
+    "included": 1,
+    "time_start": 10
+  },
+  "Meeting3": {
+    "schema": "Meeting",
+    "time_start_lower_boundary": 14,
+    "time_start_upper_boundary": 18,
+    "duration": 4,
+    "potential_revenue": 800,
+    "included": 1,
+    "time_start": 14
+  },
+  "Meeting4": {
+    "schema": "Meeting",
+    "time_start_lower_boundary": 14,
+    "time_start_upper_boundary": 16,
+    "duration": 2,
+    "potential_revenue": 500,
+    "included": 1,
+    "time_start": 14
+  },
+  "Meeting5": {
+    "schema": "Meeting",
+    "time_start_lower_boundary": 10,
+    "time_start_upper_boundary": 18,
+    "duration": 2,
+    "potential_revenue": 400,
+    "included": 1,
+    "time_start": 14
+  }
+}
