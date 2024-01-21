@@ -33,7 +33,7 @@ class ConfigurationManager:
             sch_parameters = sch.keys()
 
             for parameter_name in sch_parameters:
-                parameter_type = sch[parameter_name]
+                parameter_type = sch[parameter_name]['var_const']
                 if parameter_type not in ["const", "var"]:
                     raise TypeError(f'Type of parameter {parameter_name} in schema {sch_name}'
                                     f' must be "const" or "var"')
@@ -49,7 +49,10 @@ class InputManager:
         self.input_validated = False
 
         self.index_to_parameter = {}
+        self.index_to_gene_space = {}
         self.parameter_to_index = {}
+
+        self.gene_space = []
 
     def register_input(self):
         self._validate_input()
@@ -75,6 +78,40 @@ class InputManager:
         self.input_validated = True
         print("Input validated.")
 
+    def __process_schema_parameter(self, gene_index: int, schema_parameter: dict):
+        gene_space_dict = {}
+
+        # Check if 'type' is in schema_parameter
+        gene_type = schema_parameter.get('type')
+        if gene_type not in [None, "int", "float", "binary"]:
+            raise TypeError(f'Gene type {gene_type} is not in ["int", "binary", "float"]')
+
+        # Check if 'range_low' and 'range_high' are both present if either is present
+        range_low = schema_parameter.get("range_low")
+        range_high = schema_parameter.get("range_high")
+        if range_low is not None or range_high is not None:
+            if range_low is None or range_high is None:
+                raise KeyError("Both 'range_low' and 'range_high' must be present")
+
+            # Validate types based on gene_type
+            if gene_type == 'int':
+                if not isinstance(range_low, int) or not isinstance(range_high, int):
+                    raise TypeError("For 'int' type, 'range_low' and 'range_high' must be integers")
+            elif gene_type == 'binary':
+                if range_low != 0 or range_high != 1:
+                    raise TypeError("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
+
+        # Set values in gene_space_dict
+        if gene_type == 'binary':
+            gene_space_dict = {"low": 0, "high": 1, "step": 1}
+        elif gene_type in ['int', 'float']:
+            gene_space_dict["low"] = range_low
+            gene_space_dict["high"] = range_high
+            if gene_type == 'int':
+                gene_space_dict["step"] = 1
+
+        self.index_to_gene_space[gene_index] = gene_space_dict
+
     def _allocate_indexes(self):
         i = 0
         for user_object_name in self.user_input.keys():
@@ -82,11 +119,11 @@ class InputManager:
             parameter_to_index_object = {}
             for parameter in user_object.keys():
                 if parameter != 'schema':
-                    if self.schema[user_object["schema"]][parameter] == 'var':
+                    schema_parameter = self.schema[user_object["schema"]][parameter]
+                    if schema_parameter["var_const"] == 'var':
                         self.index_to_parameter[i] = {"name": user_object_name, parameter: parameter}
+                        self.__process_schema_parameter(i, schema_parameter)
                         parameter_to_index_object[parameter] = i
                         i += 1
             self.parameter_to_index[user_object_name] = parameter_to_index_object
         print("Indexes allocated")
-
-
