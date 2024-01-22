@@ -1,5 +1,6 @@
 import copy
 
+from configuration.fitness_function import fitness_function
 from input_management import InputManager
 
 
@@ -36,3 +37,17 @@ class SolutionHandler:
             self.solution_state[address["name"]][address["parameter"]] = value
 
     # ToDo Check restrictions
+
+
+class FitnessFunctionWrapper:
+    def __init__(self, solution_handler: SolutionHandler):
+        self.solution_handler = solution_handler
+
+    def custom_fitness_function(self, ga_instance, solution, solution_idx):
+        self.solution_handler.assign_values_from_solution(solution)
+        solution_state = self.solution_handler.solution_state
+
+        fitness_value = fitness_function(solution_state)
+
+        print(fitness_value)
+        return fitness_value

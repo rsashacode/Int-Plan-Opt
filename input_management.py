@@ -47,6 +47,7 @@ class InputManager:
         self.user_input = user_input
 
         self.input_validated = False
+        self.indexes_assigned = False
 
         self.index_to_parameter = {}
         self.index_to_gene_space = {}
@@ -121,9 +122,10 @@ class InputManager:
                 if parameter != 'schema':
                     schema_parameter = self.schema[user_object["schema"]][parameter]
                     if schema_parameter["var_const"] == 'var':
-                        self.index_to_parameter[i] = {"name": user_object_name, parameter: parameter}
+                        self.index_to_parameter[i] = {"name": user_object_name, 'parameter': parameter}
                         self.__process_schema_parameter(i, schema_parameter)
                         parameter_to_index_object[parameter] = i
                         i += 1
             self.parameter_to_index[user_object_name] = parameter_to_index_object
+        self.indexes_assigned = True
         print("Indexes allocated")
