@@ -7,6 +7,7 @@ from solution import SolutionHandler
 from server.server import Server
 from logs.log import logger
 
+
 class Service:
     """
     Master class handling the service behaviour.
@@ -15,6 +16,7 @@ class Service:
     def __init__(self):
         self.config_manager = ConfigurationManager()
         self.config_manager.load_configuration()
+        self._server_status = False
 
         if self.config_manager.configuration_settings['input_method'].lower() == 'json':
             if os.path.exists('./configuration/input.json'):
@@ -30,8 +32,13 @@ class Service:
                 logger.error("Input file not found.")
                 raise FileNotFoundError('Input file not found.')
         else:
+            self._server_status = True
             server = Server(self.config_manager)
             server.start()
+
+    @property
+    def server_status(self):
+        return self._server_status
 
     def start_optimization(self):
         """

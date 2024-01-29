@@ -8,8 +8,8 @@ logger.setLevel(logging.DEBUG)
 
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
-if not os.path.exists(''):
-    os.mkdir('')
+if not os.path.exists('./logs'):
+    os.mkdir('./logs')
 
 file_handler = RotatingFileHandler('app.log', maxBytes=10 * 1024 * 1024, backupCount=5)
 file_handler.setLevel(logging.DEBUG)

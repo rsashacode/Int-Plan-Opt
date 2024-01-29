@@ -9,7 +9,8 @@ def main():
     """
     logger.info("Starting Int-Plan-Opt")
     service = Service()
-    service.start()
+    if not service.server_status:
+        service.start_optimization()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import json
 from logs.log import logger
 
+
 class ConfigurationManager:
     """
     Configuration manager. This class is responsible for managing the configuration of the program.
@@ -117,7 +118,7 @@ class InputManager:
         self.input_validated = True
         logger.info("Input validated.")
 
-    def __process_schema_parameter(self, gene_index: int, schema_parameter: dict):
+    def _process_schema_parameter(self, gene_index: int, schema_parameter: dict):
         """
         Processing each parameter. Determination of its type and gene space.
 
@@ -185,7 +186,7 @@ class InputManager:
                     schema_parameter = self.schema[user_object["schema"]][parameter]
                     if schema_parameter["var_const"] == 'var':
                         self.index_to_parameter[i] = {"name": user_object_name, 'parameter': parameter}
-                        self.__process_schema_parameter(i, schema_parameter)
+                        self._process_schema_parameter(i, schema_parameter)
                         parameter_to_index_object[parameter] = i
                         i += 1
             self.parameter_to_index[user_object_name] = parameter_to_index_object
