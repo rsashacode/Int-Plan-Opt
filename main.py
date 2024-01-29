@@ -2,7 +2,7 @@ from logs.log import logger
 from service_management import Service
 
 
-def main():
+def start():
     """
     Main function to start the service.
     :return:
@@ -14,4 +14,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    start()
