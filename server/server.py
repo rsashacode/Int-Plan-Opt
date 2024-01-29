@@ -1,5 +1,6 @@
 import threading
 
+from logs.log import logger
 from flask import Flask, jsonify, request
 from flasgger import Swagger
 from input_management import ConfigurationManager, InputManager
@@ -8,7 +9,12 @@ from solution import SolutionHandler
 
 
 class Server:
+    """
+    Creates a server if is set in configuration file
+
+    """
     def __init__(self, config_manager: ConfigurationManager):
+        logger.debug("Initializing Server")
         self.calculating = False
         self.calculated = False
         self.app = Flask(__name__)
@@ -23,8 +29,15 @@ class Server:
         self.app.add_url_rule('/input', 'input', self.input, methods=['POST'])
         self.app.add_url_rule('/start', 'start', self.start_calculation, methods=['GET'])
         self.app.add_url_rule('/status', 'status', self.status, methods=['GET'])
+        logger.debug("Server successfully initialised.")
 
     def do_calculation(self):
+        """
+        Starts the calculation. Should be called in a separate thread.
+
+        :return:
+        """
+        logger.info("Starting calculation")
         if self.config_manager.configuration_settings['fitness_function'] != 'included':
             external_fitness = True
         else:
@@ -36,8 +49,10 @@ class Server:
         )
         self.calculating = True
         self.optimizer.optimize()
+        self.optimizer.save_results()
         self.calculating = False
         self.calculated = True
+        logger.info("Calculation successful.")
 
     def input(self):
         """
@@ -53,6 +68,7 @@ class Server:
             description: Input received
         """
         input_data = request.get_json()
+        logger.info("Input data received")
         if not self.calculating:
             self.input_manager.register_input(input_data)
             return jsonify({"message": "Accepted input."}), 200

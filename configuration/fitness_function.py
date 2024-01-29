@@ -2,9 +2,15 @@ import numpy as np
 
 
 def fitness_function(solution_state: dict) -> float:
+    """
+    Editable function.
 
-    # Editable section. All updated objects are stored in solution_state dictionary. All keys are as specified in
-    # schema and input.
+    All updated objects are stored in solution_state dictionary. All keys are as specified in schema and input.
+    :param solution_state: solution state
+    :param type solution_state: dict
+    :return: solution_state
+    :return type: float
+    """
 
     total_revenue = 0
 
@@ -27,7 +33,5 @@ def fitness_function(solution_state: dict) -> float:
         total_revenue += meeting["potential_revenue"]
 
     fitness_value = total_revenue
-
-    # end of editable section
 
     return fitness_value
