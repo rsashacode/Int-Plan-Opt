@@ -36,8 +36,6 @@ class SolutionHandler:
             address = self.index_to_parameter[ind]
             self.solution_state[address["name"]][address["parameter"]] = value
 
-    # ToDo Check restrictions
-
 
 class FitnessFunctionWrapper:
     def __init__(self, solution_handler: SolutionHandler):

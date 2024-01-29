@@ -25,6 +25,17 @@
       }
     }
   },
-  "input_method": "JSON",
-  "stopping_criteria": "convergence"
+  "input_method": "json",
+  "output_method": "file",
+  "stopping_criteria": "convergence",
+  "optimizer_settings": {
+    "num_generations": 500,
+    "num_parents_mating": 4,
+    "parent_selection_type": "sss",
+    "keep_parents": 1,
+    "crossover_type": "single_point",
+    "mutation_type": "random",
+    "mutation_percent_genes": 40,
+    "parallel_method": "thread"
+  }
 }

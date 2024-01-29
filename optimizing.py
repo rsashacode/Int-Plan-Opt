@@ -1,9 +1,10 @@
 import copy
-
-import numpy as np
+import os
 import pygad
 
+from solution import FitnessFunctionWrapper
 from input_management import InputManager
+from abc import ABCMeta
 
 
 class SolutionHandler:
@@ -41,32 +42,61 @@ class SolutionHandler:
     # ToDo Check restrictions
 
 
-class Optimizer:
-    pass
+class Optimizer(metaclass=ABCMeta):
+    def optimize(self):
+        ...
 
 
 class GeneticOptimizer(Optimizer):
     def __init__(self,
-                 fitness_function: callable,
-                 num_genes: int,
-                 num_generations: int,
-                 **args_to_pygad
+                 solution_handler: SolutionHandler,
+                 args_to_pygad: dict
                  ):
-        self.fitness_function = fitness_function
-        self.num_genes = num_genes
-        self.num_generations = num_generations
 
-        if np.array(args_to_pygad["initial_population"]).ndim != 2:
-            initial_pop = [args_to_pygad["initial_population"] for i in range(self.num_generations)]
-            args_to_pygad["initial_population"] = initial_pop
+        self.solution_handler = solution_handler
+
+        cpu_count = os.cpu_count()
+        self.solution_handler.initialise_genes()
+        f_wrapper = FitnessFunctionWrapper(self.solution_handler)
+        initial_population = self.solution_handler.initial_state_list
+
+        initial_pop = [initial_population for i in range(args_to_pygad['num_generations'])]
+
         self.ga_instance = pygad.GA(
-            fitness_func=self.fitness_function,
-            num_genes=self.num_genes,
-            num_generations=self.num_generations,
-            **args_to_pygad
+            fitness_func=f_wrapper.custom_fitness_function,
+            num_genes=len(initial_population),
+            num_generations=args_to_pygad['num_generations'],
+            num_parents_mating=args_to_pygad['num_parents_mating'],
+            sol_per_pop=cpu_count - 1,
+            initial_population=initial_pop,
+            parent_selection_type=args_to_pygad['parent_selection_type'],
+            keep_parents=args_to_pygad['keep_parents'],
+            crossover_type=args_to_pygad['crossover_type'],
+            mutation_type=args_to_pygad['mutation_type'],
+            mutation_percent_genes=args_to_pygad['mutation_percent_genes'],
+            parallel_processing=[args_to_pygad['parallel_method'], cpu_count]
         )
+        ...
+        # ToDo check if unsuccessful init
+
+        self.solution = None
+        self.solution_fitness = None
+        self.solution_idx = None
+
+        self.result = None
+        self.result_list = None
 
     def optimize(self):
         self.ga_instance.run()
         solution, solution_fitness, solution_idx = self.ga_instance.best_solution()
+
+        self.solution = solution
+        self.solution_fitness = solution_fitness
+        self.solution_idx = solution_idx
+
+        self.solution_handler.assign_values_from_solution(solution)
+
+        self.result = self.solution_handler.solution_state
+        self.result_list = [self.result[key] for key in self.result.keys()]
+
         return solution, solution_fitness, solution_idx

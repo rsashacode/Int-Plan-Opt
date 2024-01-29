@@ -4,13 +4,12 @@ from pathlib import Path
 
 
 class ConfigurationManager:
-    def __init__(self, config_filepath: Path):
-        self.config_filepath = config_filepath
+    def __init__(self):
         self.configuration_settings = {}
         self.schema = {}
 
     def load_configuration(self):
-        with open(self.config_filepath, 'r') as j:
+        with open('./configuration/config.json', 'r') as j:
             self.configuration_settings = json.loads(j.read())
         self._validate_configuration()
         print("Configuration ready.")
@@ -23,8 +22,7 @@ class ConfigurationManager:
 
         if not all(['schema' in config_keys,
                     'input_method' in config_keys,
-                    'stopping_criteria' in config_keys,
-                    len(config_keys) == 3]):
+                    'stopping_criteria' in config_keys]):
             raise TypeError(f'Configuration key words are incorrect')
 
         schema = self.configuration_settings['schema']
@@ -42,9 +40,9 @@ class ConfigurationManager:
 
 
 class InputManager:
-    def __init__(self, schema: dict, user_input: dict):
+    def __init__(self, schema: dict):
         self.schema = schema
-        self.user_input = user_input
+        self.user_input = None
 
         self.input_validated = False
         self.indexes_assigned = False
@@ -55,7 +53,8 @@ class InputManager:
 
         self.gene_space = []
 
-    def register_input(self):
+    def register_input(self, input_dict: dict):
+        self.user_input = input_dict
         self._validate_input()
         self._allocate_indexes()
 
