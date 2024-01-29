@@ -49,20 +49,23 @@ class InputManager:
 
         self.index_to_parameter = {}
         self.index_to_gene_space = {}
+        self.index_to_gene_type = {}
         self.parameter_to_index = {}
 
         self.gene_space = []
+        self.gene_type = []
 
     def register_input(self, input_dict: dict):
         self.user_input = input_dict
         self._validate_input()
         self._allocate_indexes()
+        self._create_gene_space()
 
     def _validate_input(self):
         for obj_name in self.user_input:
             obj_parameters = self.user_input[obj_name].keys()
             if "schema" not in obj_parameters:
-                raise KeyError('Mandatory key "name" not found in the object')
+                raise KeyError('Mandatory key "schema" not found in the object')
             obj_schema_name = self.user_input[obj_name]["schema"]
             if obj_schema_name not in self.schema.keys():
                 raise KeyError(f"Template {obj_schema_name} is no registered.")
@@ -97,19 +100,26 @@ class InputManager:
             if gene_type == 'int':
                 if not isinstance(range_low, int) or not isinstance(range_high, int):
                     raise TypeError("For 'int' type, 'range_low' and 'range_high' must be integers")
+
             elif gene_type == 'binary':
                 if range_low != 0 or range_high != 1:
                     raise TypeError("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
 
         # Set values in gene_space_dict
         if gene_type == 'binary':
+            self.index_to_gene_type[gene_index] = int
             gene_space_dict = {"low": 0, "high": 1, "step": 1}
         elif gene_type in ['int', 'float']:
             gene_space_dict["low"] = range_low
             gene_space_dict["high"] = range_high
             if gene_type == 'int':
+                self.index_to_gene_type[gene_index] = int
                 gene_space_dict["step"] = 1
+            else:
+                self.index_to_gene_type[gene_index] = float
 
+        if range_low is None and range_high is None:
+            gene_space_dict = None
         self.index_to_gene_space[gene_index] = gene_space_dict
 
     def _allocate_indexes(self):
@@ -128,3 +138,14 @@ class InputManager:
             self.parameter_to_index[user_object_name] = parameter_to_index_object
         self.indexes_assigned = True
         print("Indexes allocated")
+
+    def _create_gene_space(self):
+        if self.indexes_assigned:
+            if (list(self.index_to_gene_space.keys()) == [i for i in range(len(self.index_to_gene_space))] and
+                    list(self.index_to_gene_type.keys()) == [i for i in range(len(self.index_to_gene_type))]):
+                self.gene_space = [item[1] for item in self.index_to_gene_space.items()]
+                self.gene_type = [item[1] for item in self.index_to_gene_type.items()]
+            else:
+                raise RuntimeError("Gene space incorrectly assigned")
+        else:
+            raise RuntimeError('Indexes not assigned')

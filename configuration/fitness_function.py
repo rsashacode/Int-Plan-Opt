@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def fitness_function(solution_state: dict) -> float:
 
     # Editable section. All updated objects are stored in solution_state dictionary. All keys are as specified in
@@ -14,11 +17,11 @@ def fitness_function(solution_state: dict) -> float:
         schedule[i]["time_end"] = meeting["time_start"] + meeting["duration"]
         if i >= 1:
             if schedule[i - 1]["time_end"] > schedule[i]["time_start"]:
-                return 0
+                return -1 * np.inf
         if any([schedule[i]["time_start"] < schedule[i]['time_start_lower_boundary'],
                 schedule[i]["time_start"] > schedule[i]['time_start_upper_boundary'],
                 ]):
-            return 0
+            return -1 * np.inf
 
     for i, meeting in enumerate(schedule):
         total_revenue += meeting["potential_revenue"]

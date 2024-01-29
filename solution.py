@@ -1,5 +1,7 @@
 import copy
 
+import requests
+
 from configuration.fitness_function import fitness_function
 from input_management import InputManager
 
@@ -38,8 +40,9 @@ class SolutionHandler:
 
 
 class FitnessFunctionWrapper:
-    def __init__(self, solution_handler: SolutionHandler):
+    def __init__(self, solution_handler: SolutionHandler, external_api: str = None):
         self.solution_handler = solution_handler
+        self.external_api = external_api
 
     def custom_fitness_function(self, ga_instance, solution, solution_idx):
         self.solution_handler.assign_values_from_solution(solution)
@@ -47,5 +50,16 @@ class FitnessFunctionWrapper:
 
         fitness_value = fitness_function(solution_state)
 
+        print(fitness_value)
+        return fitness_value
+
+    def call_api(self, ga_instance, solution, solution_idx):
+        if self.external_api is None:
+            raise ValueError('Unable to call api without external api address')
+
+        self.solution_handler.assign_values_from_solution(solution)
+        solution_state = self.solution_handler.solution_state
+
+        fitness_value = requests.post(self.external_api, data=solution_state)
         print(fitness_value)
         return fitness_value

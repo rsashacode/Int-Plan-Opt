@@ -3,11 +3,11 @@
     "Meeting": {
       "included": {
         "var_const": "var",
-        "type": "binary"
+        "type": "float"
       },
       "time_start": {
         "var_const": "var",
-        "type": "int",
+        "type": "float",
         "range_low": 0,
         "range_high": 24
       },
@@ -25,7 +25,8 @@
       }
     }
   },
-  "input_method": "json",
+  "input_method": "api",
+  "fitness_function": "included",
   "output_method": "file",
   "stopping_criteria": "convergence",
   "optimizer_settings": {
@@ -35,7 +36,8 @@
     "keep_parents": 1,
     "crossover_type": "single_point",
     "mutation_type": "random",
-    "mutation_percent_genes": 40,
+    "mutation_percent_genes": 50,
+    "mutation_probability": 0.5,
     "parallel_method": "thread"
   }
 }
