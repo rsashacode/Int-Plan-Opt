@@ -13,7 +13,13 @@ All activities can be found at the link below.
 
 ## 2. UML
 The project includes several UML diagrams. 
-- &rarr; [Activity diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/main/uml_diagrams/activity_uml.png)
-- &rarr; [Components diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/answering-questions/uml_diagrams/components_uml.png)
+- &rarr; [Activity diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/main/topics_answered/uml_diagrams/activity_uml.png)
+- &rarr; [Components diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/main/topics_answered/uml_diagrams/components_uml.png)
+- &rarr; [Class diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/main/topics_answered/uml_diagrams/classes_uml.png)
+
+## 3. Requirements engineering
+Requirements were made using 2 different tools: Notion and Xebrio (6 in each)
+- &rarr; [Xebrio requirements](https://github.com/rkvcode/Int-Plan-Opt/blob/main/topics_answered/uml_diagrams/activity_uml.png)
+
 
 https://apricot-hoodie-e6c.notion.site/Int-Plan-Opt-Requirements-db94b6b337bc49af901fe1ab803ab5f8?pvs=25
