@@ -104,12 +104,12 @@ class GeneticOptimizer(Optimizer):
             logger.error(e)
             raise TypeError(e)
 
-        self.solution = None
-        self.solution_fitness = None
+        self.solution: list = []
+        self.solution_fitness: [float, int] = 0
         self.solution_idx = None
 
-        self.result = None
-        self.result_list = None
+        self.result: dict = {}
+        self.result_list: list = []
 
     def optimize(self):
         """
