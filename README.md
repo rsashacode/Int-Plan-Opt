@@ -15,3 +15,5 @@ All activities can be found at the link below.
 The project includes several UML diagrams. 
 - &rarr; [Activity diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/main/uml_diagrams/activity_uml.png)
 - &rarr; [Components diagram](https://github.com/rkvcode/Int-Plan-Opt/blob/answering-questions/uml_diagrams/components_uml.png)
+
+https://apricot-hoodie-e6c.notion.site/Int-Plan-Opt-Requirements-db94b6b337bc49af901fe1ab803ab5f8?pvs=25

@@ -11,8 +11,10 @@ from solution import SolutionHandler
 class Server:
     """
     Creates a server if is set in configuration file
-
     """
+    SERVER_HOST = '0.0.0.0'
+    SERVER_PORT = 5000
+
     def __init__(self, config_manager: ConfigurationManager):
         logger.debug("Initializing Server")
         self.calculating = False
@@ -110,4 +112,4 @@ class Server:
         return jsonify({"message": "Server is running"}), 200
 
     def start(self):
-        self.app.run(debug=False, host='0.0.0.0', port=5000)
+        self.app.run(debug=False, host=self.SERVER_HOST, port=self.SERVER_PORT)
