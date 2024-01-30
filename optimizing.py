@@ -49,11 +49,11 @@ class SolutionHandler:
 class Optimizer(ABC):
     @abstractmethod
     def optimize(self):
-        raise NotImplemented("Please implement this method")
+        pass
 
     @abstractmethod
     def save_results(self):
-        raise NotImplemented("Please implement this method")
+        pass
 
 
 class GeneticOptimizer(Optimizer):
@@ -74,7 +74,7 @@ class GeneticOptimizer(Optimizer):
         f_wrapper = FitnessFunctionWrapper(self.solution_handler)
         initial_population = self.solution_handler.initial_state_list
 
-        initial_pop = [initial_population for i in range(args_to_pygad['num_generations'])]
+        initial_pop = [initial_population for _ in range(args_to_pygad['num_generations'])]
         gene_space = solution_handler.input_manager.gene_space
         gene_type = solution_handler.input_manager.gene_type
         if not external_fitness_function:

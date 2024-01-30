@@ -21,9 +21,8 @@ def fitness_function(solution_state: dict) -> float:
     schedule = sorted(meetings_list, key=lambda x: x['time_start'], reverse=False)
     for i, meeting in enumerate(schedule):
         schedule[i]["time_end"] = meeting["time_start"] + meeting["duration"]
-        if i >= 1:
-            if schedule[i - 1]["time_end"] > schedule[i]["time_start"]:
-                return -1 * np.inf
+        if i >= 1 and schedule[i - 1]["time_end"] > schedule[i]["time_start"]:
+            return -1 * np.inf
         if any([schedule[i]["time_start"] < schedule[i]['time_start_lower_boundary'],
                 schedule[i]["time_start"] > schedule[i]['time_start_upper_boundary'],
                 ]):

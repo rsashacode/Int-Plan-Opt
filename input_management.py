@@ -37,8 +37,8 @@ class ConfigurationManager:
         if not all(['schema' in config_keys,
                     'input_method' in config_keys,
                     'stopping_criteria' in config_keys]):
-            logger.error(f'Configuration key words are incorrect')
-            raise TypeError(f'Configuration key words are incorrect')
+            logger.error('Configuration key words are incorrect')
+            raise TypeError('Configuration key words are incorrect')
 
         schema = self.configuration_settings['schema']
         for sch_name in schema.keys():
@@ -148,10 +148,9 @@ class InputManager:
                     logger.error("For 'int' type, 'range_low' and 'range_high' must be integers")
                     raise TypeError("For 'int' type, 'range_low' and 'range_high' must be integers")
 
-            elif gene_type == 'binary':
-                if range_low != 0 or range_high != 1:
-                    logger.error("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
-                    raise TypeError("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
+            elif gene_type == 'binary' and (range_low != 0 or range_high != 1):
+                logger.error("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
+                raise TypeError("For 'binary' type, 'range_low' must be 0 and 'range_high' must be 1")
 
         # Set values in gene_space_dict
         if gene_type == 'binary':
@@ -178,20 +177,24 @@ class InputManager:
         :return:
         """
         i = 0
-        for user_object_name in self.user_input.keys():
-            user_object = self.user_input[user_object_name]
-            parameter_to_index_object = {}
-            for parameter in user_object.keys():
-                if parameter != 'schema':
-                    schema_parameter = self.schema[user_object["schema"]][parameter]
-                    if schema_parameter["var_const"] == 'var':
-                        self.index_to_parameter[i] = {"name": user_object_name, 'parameter': parameter}
-                        self._process_schema_parameter(i, schema_parameter)
-                        parameter_to_index_object[parameter] = i
-                        i += 1
-            self.parameter_to_index[user_object_name] = parameter_to_index_object
-        self.indexes_assigned = True
-        logger.debug("Indexes allocated")
+        if type(self.user_input) == dict and len(self.user_input) > 0:
+            for user_object_name in self.user_input.keys():
+                user_object = self.user_input[user_object_name]
+                parameter_to_index_object = {}
+                for parameter in user_object.keys():
+                    if parameter != 'schema':
+                        schema_parameter = self.schema[user_object["schema"]][parameter]
+                        if schema_parameter["var_const"] == 'var':
+                            self.index_to_parameter[i] = {"name": user_object_name, 'parameter': parameter}
+                            self._process_schema_parameter(i, schema_parameter)
+                            parameter_to_index_object[parameter] = i
+                            i += 1
+                self.parameter_to_index[user_object_name] = parameter_to_index_object
+            self.indexes_assigned = True
+            logger.debug("Indexes allocated")
+        else:
+            logger.error("Input must be a non-empty dictionary")
+            raise TypeError("Input must be a non-empty dictionary")
 
     def _create_gene_space(self):
         """
