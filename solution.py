@@ -99,5 +99,4 @@ class FitnessFunctionWrapper:
         solution_state = self.solution_handler.solution_state
 
         fitness_value = requests.post(self.external_api, data=solution_state)
-        logger.debug(fitness_value)
         return fitness_value

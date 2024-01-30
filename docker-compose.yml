@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  int-plan-opt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./results:/usr/src/int_plan_opt/results
+      - ./logs:/usr/src/int_plan_opt/logs
+    ports:
+      - '5000:5000'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
