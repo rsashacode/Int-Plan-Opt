@@ -62,8 +62,8 @@ CCD sheet can be found here:
 &rarr; [CCD Sheet](https://github.com/rkvcode/Int-Plan-Opt/blob/main/topics_answered/CCD/sheet.pdf)
 
 
-## 8. Build Management
-Docker acts as a build management system in this project with the help of
+## 8. Build
+Docker acts as a container management system in this project with the help of
 docker-compose plugin. The program can be deployed using single command:
 
 docker compose up -d --build
