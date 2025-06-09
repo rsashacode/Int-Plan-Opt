@@ -85,29 +85,7 @@ Total 16 tests written with pytest.
 
 &rarr; [And here](https://github.com/rkvcode/Int-Plan-Opt/blob/main/tests/test_input_management.py)
 
-
-## 10. IDE
-I use Pycharm for about 4 years now as a main developer tool. It covers most of my requirements.
-What I like most about it is:
-- Support of multiple languages
-- Internal jupyter support (much better than jupterlab)
-- Remote development feature
-- Possibility to connect ot databases
-- Development and services feature
-- Diagrams feature
-
-and much more.
-
-Favourite shortcuts:
-- ctrl+c, ctrl+v :)
-- ctrl+f
-- ctrl+r
-- shift+tab
-- ctrl+/ - comment-uncomment
-- alt+enter - show actions if there is a warning
-- ctrl+enter - execute in console
-
-## 11. Functional Programming
+## 10. Functional Programming
 - [only final data structures](https://github.com/rkvcode/Int-Plan-Opt/blob/main/optimizing.py#L107)
 - [(mostly) side-effect-free functions](https://github.com/rkvcode/Int-Plan-Opt/blob/main/service_management.py#L40)
 - [the use of higher-order functions/functions as parameters and return values](https://github.com/rkvcode/Int-Plan-Opt/blob/main/optimizing.py#L81)
